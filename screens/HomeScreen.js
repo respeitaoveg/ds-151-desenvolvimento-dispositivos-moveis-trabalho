@@ -26,7 +26,7 @@ const HomeScreen = () => {
     });
   }, []);
 
-  function createMessage() {
+  function onCreateMessage() {
     const time = new Date().getTime();
 
     set(ref(db, `/chat/${time}`), {
@@ -38,7 +38,7 @@ const HomeScreen = () => {
     setMessage("");
   }
 
-  function onClickStaredMessage(message) {
+  function onPressStaredMessage(message) {
     const time = new Date().getTime();
 
     console.log(message)
@@ -58,7 +58,7 @@ const HomeScreen = () => {
               userId={item.userId}
               user={item.user} 
               content={item.content} 
-              onClickStaredMessage={onClickStaredMessage}
+              onPressStaredMessage={onPressStaredMessage}
             />
           ))
         }
@@ -70,10 +70,10 @@ const HomeScreen = () => {
             style={styles.textInput}
             value={message}
             onChangeText={setMessage}
-            onSubmitEditing={createMessage}
+            onSubmitEditing={onCreateMessage}
             returnKeyType='done'
           />
-          <TouchableOpacity onPress={createMessage}>
+          <TouchableOpacity onPress={onCreateMessage}>
             <IconAwesome name='send-o' color='orange' size={30} />
           </TouchableOpacity>
         </View>

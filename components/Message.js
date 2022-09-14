@@ -3,7 +3,7 @@ import IconAwesome from "react-native-vector-icons/FontAwesome";
 import IconAntDesign from "react-native-vector-icons/AntDesign";
 import globalStyles from "../styles/global";
 
-export const Message = ({ userId, user, content, onClickStaredMessage }) => {
+export const Message = ({ userId, user, content, onPressStaredMessage }) => {
   const myUser = "Yuri";
 
   return (
@@ -25,7 +25,7 @@ export const Message = ({ userId, user, content, onClickStaredMessage }) => {
           <Text style={{ color: "orange", fontSize: 16 }}>{user}</Text>
         </View>
 
-        <TouchableOpacity onPress={() => onClickStaredMessage({userId, user, content})}>
+        <TouchableOpacity onPress={() => onPressStaredMessage({userId, user, content})}>
           <IconAntDesign name="star" color="orange" size={20} />
         </TouchableOpacity>
       </View>
