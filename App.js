@@ -11,8 +11,8 @@ export default function App() {
     <SafeAreaProvider>
       <NavigationContainer>
         <Tab.Navigator>
-          <Tab.Screen name="Home" options={{headerShown: false}} component={HomeScreen} />
-          <Tab.Screen name="Home2" options={{headerShown: false}} component={HomeScreen} />
+          <Tab.Screen name="Home" component={HomeScreen} />
+          <Tab.Screen name="Alunos" component={HomeScreen} />
         </Tab.Navigator>
       </NavigationContainer>
       <StatusBar style="auto" />
