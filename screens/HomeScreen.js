@@ -14,10 +14,14 @@ const HomeScreen = ({ navigation }) => {
 
 
       if (data) {
+        let newMessages = []
+
         Object.values(data).forEach(item => {
           console.log('item', item)
-          setMessages(oldItems => [...oldItems, item])
+          newMessages.push(item)
         })
+
+        setMessages(newMessages)
       }
 
     })
