@@ -6,14 +6,12 @@ import Message from "../components/Message";
 import IconAwesome from 'react-native-vector-icons/FontAwesome'
 
 const HomeScreen = () => {
+  const [messages, setMessages] = useState([]);
 
   const userId = 123
 
-  const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState([]);
-
   useEffect(() => {
-    onValue(ref(db, "chat"), (snapshot) => {
+    onValue(ref(db, `users/${userId}/stars`), (snapshot) => {
       const data = snapshot.val();
 
       if (data) {
@@ -26,26 +24,6 @@ const HomeScreen = () => {
     });
   }, []);
 
-  function createMessage() {
-    const time = new Date().getTime();
-
-    set(ref(db, `/chat/${time}`), {
-      userId: '123',
-      user: "Yuri",
-      content: message,
-    });
-
-    setMessage("");
-  }
-
-  function onClickStaredMessage(message) {
-    const time = new Date().getTime();
-
-    console.log(message)
-
-    set(ref(db, `users/${userId}/${time}`), message);
-  }
-
   return (
     <View style={styles.container}>
       <View
@@ -53,30 +31,9 @@ const HomeScreen = () => {
       >
         {messages.length > 0 &&
           messages.map((item, index) => (
-            <Message 
-              key={index} 
-              userId={item.userId}
-              user={item.user} 
-              content={item.content} 
-              onClickStaredMessage={onClickStaredMessage}
-            />
+            <Message key={index} user={item.user} content={item.content} />
           ))
         }
-      </View>
-
-      <View style={{flex:1, height:'100%', width: '100%', justifyContent: 'center', paddingHorizontal: 16}}>
-        <View style={{display: 'flex', flexDirection: 'row', gap: 10, width: '100%'}}>
-          <TextInput
-            style={styles.textInput}
-            value={message}
-            onChangeText={setMessage}
-            onSubmitEditing={createMessage}
-            returnKeyType='done'
-          />
-          <TouchableOpacity onPress={createMessage}>
-            <IconAwesome name='send-o' color='orange' size={30} />
-          </TouchableOpacity>
-        </View>
       </View>
     </View>
   );
