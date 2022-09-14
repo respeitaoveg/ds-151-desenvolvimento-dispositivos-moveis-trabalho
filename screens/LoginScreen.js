@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -8,23 +8,13 @@ import {
 } from "react-native";
 import globalStyles from "../styles/global";
 import IconMaterialIcons from "react-native-vector-icons/MaterialIcons";
-import { getAuth, signInWithEmailAndPassword } from "@firebase/auth";
+import { AuthContext} from '../App'
 
 export const LoginScreen = () => {
+  const { signIn } = useContext(AuthContext)
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const auth = getAuth()
-
-  function onClickLogin() {
-    signInWithEmailAndPassword(auth, email, password)
-    .then(userCredential => {
-      console.log(userCredential)
-    })
-    .catch(error => {
-      console.log(error)
-    })
-  }
 
   return (
     <View style={styles.container}>
@@ -49,7 +39,7 @@ export const LoginScreen = () => {
           </View>
         </View>
     
-        <TouchableOpacity style={styles.button} onPress={onClickLogin}>
+        <TouchableOpacity style={styles.button} onPress={() => signIn({email, password})}>
           <Text style={{ color: "orange", fontSize: 24 }}>Entrar</Text>
         </TouchableOpacity>
       </View>
