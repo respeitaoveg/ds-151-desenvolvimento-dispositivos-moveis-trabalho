@@ -35,7 +35,7 @@ const TopMessagesScreen = ({ navigation }) => {
     .value();
 
     setTopMessages(aux)
-  });
+  }, [messages]);
 
   function onPressLikeMessage() {}
 
