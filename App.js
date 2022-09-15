@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from './screens/HomeScreen';
 import StarsScreen from './screens/StarsScreen';
 import { createContext, useEffect, useMemo, useReducer, useState } from 'react';
@@ -10,7 +10,7 @@ import LoginScreen from './screens/LoginScreen';
 import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from "@firebase/auth";
 
 
-const Tab = createMaterialTopTabNavigator();
+const Stack = createNativeStackNavigator();
 export const AuthContext = createContext()
 const auth = getAuth()
 
@@ -87,12 +87,13 @@ export default function App() {
   return (
     <AuthContext.Provider value={authContext}>
       <SafeAreaProvider>
-        {state.isLogged ? (
+        {/* {state.isLogged ? ( */}
+        {true ? (
           <NavigationContainer>
-            <Tab.Navigator>
-              <Tab.Screen name="Sala" component={HomeScreen} />
-              <Tab.Screen name="Estrelas" component={StarsScreen} />
-            </Tab.Navigator>
+            <Stack.Navigator>
+              <Stack.Screen name="Sala" options={{headerShown: false}} component={HomeScreen} />
+              <Stack.Screen name="Estrelas" component={StarsScreen} />
+            </Stack.Navigator>
           </NavigationContainer>
         ) :  (
           <LoginScreen />

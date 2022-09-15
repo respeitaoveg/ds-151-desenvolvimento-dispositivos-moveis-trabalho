@@ -1,14 +1,23 @@
 import { useContext, useEffect, useState } from "react";
 import { db } from "../firebase";
 import { onValue, ref, set } from "@firebase/database";
-import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import Message from "../components/Message";
-import IconAwesome from 'react-native-vector-icons/FontAwesome'
-import { AuthContext } from '../App'
+import IconAwesome from "react-native-vector-icons/FontAwesome";
+import IconMaterialIcons from "react-native-vector-icons/MaterialIcons";
+import IconMaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import IconSimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
+import { AuthContext } from "../App";
 
-const HomeScreen = () => {
-  const { state, signOut } = useContext(AuthContext)
-  console.log(111, state)
+const HomeScreen = ({ navigation }) => {
+  const { state, signOut } = useContext(AuthContext);
+  console.log(111, state);
 
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
@@ -32,7 +41,7 @@ const HomeScreen = () => {
 
     set(ref(db, `/chat/${time}`), {
       id: time,
-      userId: '123',
+      userId: "123",
       user: "Yuri",
       likes: 0,
       content: message,
@@ -42,45 +51,59 @@ const HomeScreen = () => {
   }
 
   function onPressLikeMessage(message) {
-    message.likes++
+    message.likes++;
 
     set(ref(db, `/chat/${message.id}`), message);
   }
 
   return (
     <View style={styles.container}>
-      <View
-        style={styles.chat}
-      >
+      <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16 }}>
+      <TouchableOpacity>
+        <IconSimpleLineIcons name="trophy" color="orange" size={30} />
+      </TouchableOpacity>
+      <TouchableOpacity>
+        <IconMaterialCommunityIcons name="robot" color="orange" size={30} />
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => signOut()}>
+        <IconMaterialIcons name="logout" color="orange" size={30} />
+      </TouchableOpacity>
+      </View>
+      <View style={styles.chat}>
         {messages.length > 0 &&
           messages.map((item, index) => (
-            <Message 
-              key={index} 
+            <Message
+              key={index}
               id={item.id}
               userId={item.userId}
-              user={item.user} 
-              content={item.content} 
+              user={item.user}
+              content={item.content}
               likes={item.likes}
               onPressLikeMessage={onPressLikeMessage}
             />
-          ))
-        }
+          ))}
       </View>
 
-      <View style={{flex:1, height:'100%', width: '100%', justifyContent: 'center', paddingHorizontal: 16}}>
-        <View style={{display: 'flex', flexDirection: 'row', gap: 10, width: '100%'}}>
+      <View
+        style={styles.footer}
+      >
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            gap: 10,
+            width: "100%",
+          }}
+        >
           <TextInput
             style={styles.textInput}
             value={message}
             onChangeText={setMessage}
             onSubmitEditing={onCreateMessage}
-            returnKeyType='done'
+            returnKeyType="done"
           />
           <TouchableOpacity onPress={onCreateMessage}>
-            <IconAwesome name='send-o' color='orange' size={30} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => signOut()}>
-            <IconAwesome name='send-o' color='orange' size={30} />
+            <IconAwesome name="send-o" color="orange" size={30} />
           </TouchableOpacity>
         </View>
       </View>
@@ -94,25 +117,31 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
     justifyContent: "space-between",
     gap: 10,
-    paddingTop: 5,
     overflow: "hidden",
     maxHeight: "100%",
   },
   chat: {
-    height: "85vh",
+    height: "80vh",
     width: "100%",
     overflow: "scroll",
     gap: 20,
-    paddingHorizontal: 16
+    paddingHorizontal: 16,
   },
   textInput: {
-    color: 'orange',
+    color: "orange",
     borderWidth: 2,
     borderColor: "orange",
     borderRadius: 10,
     height: 32,
-    width: '100%',
-    padding: 4
+    width: "100%",
+    padding: 4,
+  },
+  footer: {
+    flex: 1,
+    height: "100%",
+    width: "100%",
+    justifyContent: "center",
+    paddingHorizontal: 16,
   },
 });
 
