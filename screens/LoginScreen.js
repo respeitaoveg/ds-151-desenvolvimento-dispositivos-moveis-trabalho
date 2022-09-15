@@ -17,73 +17,49 @@ export const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  function onEnterClick() {
+    if (isRegister) signUp({email, password})
+    else signIn({email, password})
+  }
+
+  function onNewClick() {
+    if (isRegister) setIsRegister(false)
+    else setIsRegister(true)
+  }
+
   return (
     <View style={styles.container}>
-      {isRegister ? (
-        <View style={styles.login}>
-          <View style={{ gap: 15 }}>
-            <View style={{gap: 4}}>
-              <Text style={{color: 'orange', fontSize: 16}}>Email</Text>
-              <TextInput
-                style={globalStyles.textInput}
-                value={email}
-                onChangeText={setEmail}
-              />
-            </View>
-
-            <View style={{gap: 4}}>
-              <Text style={{color: 'orange', fontSize: 16}}>Senha</Text>
-              <TextInput
-                style={globalStyles.textInput}
-                value={password}
-                onChangeText={setPassword}
-              />
-            </View>
-
-            <View style={{flex: 1, alignItems: 'flex-end'}}>
-                <TouchableOpacity onPress={() => setIsRegister(false)}>
-                  <Text style={globalStyles.text}>Voltar</Text>
-                </TouchableOpacity>
-              </View>
+      <View style={styles.login}>
+        <View style={{ gap: 15 }}>
+          <View style={{gap: 4}}>
+            <Text style={{color: 'orange', fontSize: 16}}>Email</Text>
+            <TextInput
+              style={globalStyles.textInput}
+              value={email}
+              onChangeText={setEmail}
+            />
           </View>
-      
-          <TouchableOpacity style={styles.button} onPress={() => signUp({email, password})}>
-            <Text style={{ color: "orange", fontSize: 24 }}>Registrar</Text>
-          </TouchableOpacity>
+
+          <View style={{gap: 4}}>
+            <Text style={{color: 'orange', fontSize: 16}}>Senha</Text>
+            <TextInput
+              style={globalStyles.textInput}
+              value={password}
+              onChangeText={setPassword}
+            />
+          </View>
+
+          <View style={{flex: 1, alignItems: 'flex-end'}}>
+              <TouchableOpacity onPress={onNewClick}>
+                <Text style={globalStyles.text}>{isRegister ? 'Voltar' : 'Novo por aqui?'}</Text>
+              </TouchableOpacity>
+            </View>
         </View>
-      ) : (
-          <View style={styles.login}>
-            <View style={{ gap: 15 }}>
-              <View style={{gap: 4}}>
-                <Text style={{color: 'orange', fontSize: 16}}>Email</Text>
-                <TextInput
-                  style={globalStyles.textInput}
-                  value={email}
-                  onChangeText={setEmail}
-                />
-              </View>
-
-              <View style={{gap: 4}}>
-                <Text style={{color: 'orange', fontSize: 16}}>Senha</Text>
-                <TextInput
-                  style={globalStyles.textInput}
-                  value={password}
-                  onChangeText={setPassword}
-                />
-              </View>
-
-              <View style={{flex: 1, alignItems: 'flex-end'}}>
-                <TouchableOpacity onPress={() => setIsRegister(true)}>
-                  <Text style={globalStyles.text}>Novo por aqui?</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-        
-            <TouchableOpacity style={styles.button} onPress={() => signIn({email, password})}>
-              <Text style={{ color: "orange", fontSize: 24 }}>Entrar</Text>
-            </TouchableOpacity>
-          </View>
-      )}
+    
+        <TouchableOpacity style={styles.button} onPress={onEnterClick}>
+          <Text style={{ color: "orange", fontSize: 24 }}>{isRegister ? 'Registar' : 'Entrar'}</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
