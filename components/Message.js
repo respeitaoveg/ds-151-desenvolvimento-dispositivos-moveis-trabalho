@@ -2,9 +2,11 @@ import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
 import IconAwesome from "react-native-vector-icons/FontAwesome";
 import IconAntDesign from "react-native-vector-icons/AntDesign";
 import globalStyles from "../styles/global";
+import { useContext } from "react";
+import { AuthContext } from "../App";
 
 export const Message = ({ id, userId, user, content, onPressLikeMessage, likes }) => {
-  const myUser = "Yuri";
+  const { state } = useContext(AuthContext);
 
   return (
     <View style={styles.container}>
@@ -18,7 +20,7 @@ export const Message = ({ id, userId, user, content, onPressLikeMessage, likes }
           }}
         >
           <IconAwesome
-            name={myUser === user ? "user" : "user-o"}
+            name={state.user.email === userId ? "user" : "user-o"}
             color="orange"
             size={24}
           />

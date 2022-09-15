@@ -3,21 +3,17 @@ import { db } from "../firebase";
 import { onValue, ref, set } from "@firebase/database";
 import {
   StyleSheet,
-  Text,
   TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
 import Message from "../components/Message";
 import IconAwesome from "react-native-vector-icons/FontAwesome";
-import IconMaterialIcons from "react-native-vector-icons/MaterialIcons";
 import IconMaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import IconSimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
 import { AuthContext } from "../App";
 
 const HomeScreen = ({ navigation }) => {
   const { state, signOut } = useContext(AuthContext);
-  console.log(111, state);
 
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
@@ -41,8 +37,8 @@ const HomeScreen = ({ navigation }) => {
 
     set(ref(db, `/chat/${time}`), {
       id: time,
-      userId: "123",
-      user: "Yuri",
+      userId: state.user.email,
+      user: state.user.email,
       likes: 0,
       content: message,
     });
@@ -60,13 +56,13 @@ const HomeScreen = ({ navigation }) => {
     <View style={styles.container}>
       <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16 }}>
       <TouchableOpacity>
-        <IconSimpleLineIcons name="trophy" color="orange" size={30} />
+        <IconMaterialCommunityIcons name="trophy-award" color="orange" size={30} />
       </TouchableOpacity>
       <TouchableOpacity>
-        <IconMaterialCommunityIcons name="robot" color="orange" size={30} />
+        <IconMaterialCommunityIcons name="robot" color="orange" size={40} />
       </TouchableOpacity>
       <TouchableOpacity onPress={() => signOut()}>
-        <IconMaterialIcons name="logout" color="orange" size={30} />
+        <IconMaterialCommunityIcons name="exit-to-app" color="orange" size={30} />
       </TouchableOpacity>
       </View>
       <View style={styles.chat}>

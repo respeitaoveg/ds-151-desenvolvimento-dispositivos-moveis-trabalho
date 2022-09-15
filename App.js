@@ -18,12 +18,12 @@ export default function App() {
   const [state, dispatch] = useReducer(
     (prevState, action) => {
       switch (action.type) {
-        case 'SIGN_IN':
-          return {
-            ...prevState,
-            isLogged: true,
-            user: action.user,
-          };
+        case 'SIGN_IN': {
+          prevState.user = action.user
+          prevState.isLogged = true
+
+          return {...prevState}
+        }
         case 'SIGN_OUT': {
           return {
             ...prevState,
@@ -36,26 +36,26 @@ export default function App() {
     {
       isLogged: false,
       isLoading: true,
-      user: null,
+      user: undefined
     }
   );
 
-  useEffect(() => {
-    // const bootstrapAsync = async () => {
-    //   let user;
+  // useEffect(() => {
+  //   // const bootstrapAsync = async () => {
+  //   //   let user;
 
-    //   try {
-    //     user = await SecureStore.getItemAsync('user');
-    //   } catch (e) {
-    //     console.error(e)
-    //   }
+  //   //   try {
+  //   //     user = await SecureStore.getItemAsync('user');
+  //   //   } catch (e) {
+  //   //     console.error(e)
+  //   //   }
 
-    //   dispatch({ type: 'RESTORE_TOKEN', token: user });
-    // };
+  //   //   dispatch({ type: 'RESTORE_TOKEN', token: user });
+  //   // };
 
-    // bootstrapAsync();
-    console.log(444, state)
-  }, state.user);
+  //   // bootstrapAsync();
+  //   console.log(444, state)
+  // }, state.user);
 
   const authContext = useMemo(
     () => ({
@@ -79,16 +79,15 @@ export default function App() {
         // dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
       },
       signOut: () => dispatch({ type: 'SIGN_OUT' }),
-      state,
-      user: state.user,
+      state
     }), []);
 
 
   return (
     <AuthContext.Provider value={authContext}>
       <SafeAreaProvider>
-        {/* {state.isLogged ? ( */}
-        {true ? (
+        {/* {true ? ( */}
+        {state.isLogged ? (
           <NavigationContainer>
             <Stack.Navigator>
               <Stack.Screen name="Sala" options={{headerShown: false}} component={HomeScreen} />
