@@ -15,6 +15,7 @@ import { AuthContext } from "../App";
 const HomeScreen = ({ navigation }) => {
   const { state, signOut } = useContext(AuthContext);
 
+  const [isAngry, setIsAngry] = useState(false)
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
 
@@ -47,6 +48,8 @@ const HomeScreen = ({ navigation }) => {
   }
 
   function onPressLikeMessage(message) {
+    if (isAngry) return 
+    
     message.likes++;
 
     set(ref(db, `/chat/${message.id}`), message);
@@ -58,8 +61,12 @@ const HomeScreen = ({ navigation }) => {
         <TouchableOpacity onPress={() => navigation.navigate('TopMessages')}>
           <IconMaterialCommunityIcons name="trophy-award" color="orange" size={30} />
         </TouchableOpacity>
-        <TouchableOpacity>
-          <IconMaterialCommunityIcons name="robot" color="orange" size={40} />
+        <TouchableOpacity onLongPress={() => setIsAngry(true)}>
+          {isAngry ?
+            <IconMaterialCommunityIcons name='robot-angry' color="orange" size={40} />
+            :
+            <IconMaterialCommunityIcons name='robot' color="orange" size={40} />
+          }
         </TouchableOpacity>
         <TouchableOpacity onPress={() => signOut()}>
           <IconMaterialCommunityIcons name="exit-to-app" color="orange" size={30} />
