@@ -53,6 +53,7 @@ export const LoginScreen = () => {
             <TextInput
               style={globalStyles.textInput}
               value={password}
+              secureTextEntry={true}
               onChangeText={setPassword}
             />
           </View>
