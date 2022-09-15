@@ -7,7 +7,7 @@ import {
   View,
 } from "react-native";
 import globalStyles from "../styles/global";
-import IconMaterialIcons from "react-native-vector-icons/MaterialIcons";
+import IconMaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { AuthContext} from '../App'
 
 export const LoginScreen = () => {
@@ -30,6 +30,14 @@ export const LoginScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.login}>
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          {isRegister ?
+            <IconMaterialCommunityIcons name="robot-excited" color="orange" size={50} />
+            :
+            <IconMaterialCommunityIcons name="robot" color="orange" size={50} />
+          }
+        </View>
+
         <View style={{ gap: 15 }}>
           <View style={{gap: 4}}>
             <Text style={{color: 'orange', fontSize: 16}}>Email</Text>
