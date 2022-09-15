@@ -11,6 +11,7 @@ export default StyleSheet.create({
         borderRadius: 10,
         height: 32,
         width: '100%',
-        padding: 4
+        padding: 4,
+        outlineStyle: 'none'
       },
 })
