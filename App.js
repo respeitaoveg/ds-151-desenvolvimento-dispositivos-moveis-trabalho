@@ -7,7 +7,7 @@ import StarsScreen from './screens/StarsScreen';
 import { createContext, useEffect, useMemo, useReducer, useState } from 'react';
 import LoginScreen from './screens/LoginScreen';
 
-import { getAuth, signInWithEmailAndPassword } from "@firebase/auth";
+import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from "@firebase/auth";
 
 
 const Tab = createMaterialTopTabNavigator();
@@ -15,87 +15,87 @@ export const AuthContext = createContext()
 const auth = getAuth()
 
 export default function App() {
-  const [isLoged, isLogedSet] = useState(true)
-
   const [state, dispatch] = useReducer(
     (prevState, action) => {
       switch (action.type) {
-        case 'RESTORE_TOKEN':
-          return {
-            ...prevState,
-            userToken: action.token,
-            isLoading: false,
-          };
         case 'SIGN_IN':
           return {
             ...prevState,
-            isSignout: false,
-            userToken: action.token,
+            isLogged: true,
+            user: action.user,
           };
-        case 'SIGN_OUT':
+        case 'SIGN_OUT': {
           return {
             ...prevState,
-            isSignout: true,
-            userToken: null,
-          };
+            user: null,
+            isLogged: false
+          }
+        }
       }
     },
     {
+      isLogged: false,
       isLoading: true,
-      isSignout: false,
-      userToken: null,
+      user: null,
     }
   );
 
   useEffect(() => {
-    const bootstrapAsync = async () => {
-      let userToken;
+    // const bootstrapAsync = async () => {
+    //   let user;
 
-      try {
-        userToken = await SecureStore.getItemAsync('userToken');
-      } catch (e) {
-        console.error(e)
-      }
+    //   try {
+    //     user = await SecureStore.getItemAsync('user');
+    //   } catch (e) {
+    //     console.error(e)
+    //   }
 
-      dispatch({ type: 'RESTORE_TOKEN', token: userToken });
-    };
+    //   dispatch({ type: 'RESTORE_TOKEN', token: user });
+    // };
 
-    bootstrapAsync();
-  }, []);
+    // bootstrapAsync();
+    console.log(444, state)
+  }, state.user);
 
   const authContext = useMemo(
     () => ({
-      signIn: async (data) => {
+      signIn: async ({email, password}) => {
         signInWithEmailAndPassword(auth, email, password)
           .then(userCredential => {
-            console.log(userCredential)
+            dispatch({ type: 'SIGN_IN', user: userCredential.user });
           })
           .catch(error => {
             console.log(error)
           })
-
+      },
+      signUp: async ({email, password}) => {
+        createUserWithEmailAndPassword(auth, email, password)
+          .then(userCredential => {
+            dispatch({ type: 'SIGN_IN', user: userCredential.user });
+          })
+          .catch(error => {
+            console.log(error)
+          })
         // dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
       },
       signOut: () => dispatch({ type: 'SIGN_OUT' }),
-      signUp: async (data) => {
-        dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
-      },
-    }),
-    []
-  );
+      state,
+      user: state.user,
+    }), []);
+
 
   return (
     <AuthContext.Provider value={authContext}>
       <SafeAreaProvider>
-        {isLoged ? (
-          <LoginScreen />
-        ) :  (
+        {state.isLogged ? (
           <NavigationContainer>
             <Tab.Navigator>
               <Tab.Screen name="Sala" component={HomeScreen} />
               <Tab.Screen name="Estrelas" component={StarsScreen} />
             </Tab.Navigator>
           </NavigationContainer>
+        ) :  (
+          <LoginScreen />
         )}
         <StatusBar style="auto" />
       </SafeAreaProvider>

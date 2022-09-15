@@ -11,38 +11,79 @@ import IconMaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { AuthContext} from '../App'
 
 export const LoginScreen = () => {
-  const { signIn } = useContext(AuthContext)
+  const [isRegister, setIsRegister] = useState(false)
+  const { signIn, signUp } = useContext(AuthContext)
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   return (
     <View style={styles.container}>
-      <View style={styles.login}>
-        <View style={{ gap: 15 }}>
-          <View style={{gap: 4}}>
-            <Text style={{color: 'orange', fontSize: 16}}>Email</Text>
-            <TextInput
-              style={globalStyles.textInput}
-              value={email}
-              onChangeText={setEmail}
-            />
-          </View>
+      {isRegister ? (
+        <View style={styles.login}>
+          <View style={{ gap: 15 }}>
+            <View style={{gap: 4}}>
+              <Text style={{color: 'orange', fontSize: 16}}>Email</Text>
+              <TextInput
+                style={globalStyles.textInput}
+                value={email}
+                onChangeText={setEmail}
+              />
+            </View>
 
-          <View style={{gap: 4}}>
-            <Text style={{color: 'orange', fontSize: 16}}>Senha</Text>
-            <TextInput
-              style={globalStyles.textInput}
-              value={password}
-              onChangeText={setPassword}
-            />
+            <View style={{gap: 4}}>
+              <Text style={{color: 'orange', fontSize: 16}}>Senha</Text>
+              <TextInput
+                style={globalStyles.textInput}
+                value={password}
+                onChangeText={setPassword}
+              />
+            </View>
+
+            <View style={{flex: 1, alignItems: 'flex-end'}}>
+                <TouchableOpacity onPress={() => setIsRegister(false)}>
+                  <Text style={globalStyles.text}>Voltar</Text>
+                </TouchableOpacity>
+              </View>
           </View>
+      
+          <TouchableOpacity style={styles.button} onPress={() => signUp({email, password})}>
+            <Text style={{ color: "orange", fontSize: 24 }}>Registrar</Text>
+          </TouchableOpacity>
         </View>
-    
-        <TouchableOpacity style={styles.button} onPress={() => signIn({email, password})}>
-          <Text style={{ color: "orange", fontSize: 24 }}>Entrar</Text>
-        </TouchableOpacity>
-      </View>
+      ) : (
+          <View style={styles.login}>
+            <View style={{ gap: 15 }}>
+              <View style={{gap: 4}}>
+                <Text style={{color: 'orange', fontSize: 16}}>Email</Text>
+                <TextInput
+                  style={globalStyles.textInput}
+                  value={email}
+                  onChangeText={setEmail}
+                />
+              </View>
+
+              <View style={{gap: 4}}>
+                <Text style={{color: 'orange', fontSize: 16}}>Senha</Text>
+                <TextInput
+                  style={globalStyles.textInput}
+                  value={password}
+                  onChangeText={setPassword}
+                />
+              </View>
+
+              <View style={{flex: 1, alignItems: 'flex-end'}}>
+                <TouchableOpacity onPress={() => setIsRegister(true)}>
+                  <Text style={globalStyles.text}>Novo por aqui?</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+        
+            <TouchableOpacity style={styles.button} onPress={() => signIn({email, password})}>
+              <Text style={{ color: "orange", fontSize: 24 }}>Entrar</Text>
+            </TouchableOpacity>
+          </View>
+      )}
     </View>
   );
 };

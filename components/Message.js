@@ -3,7 +3,7 @@ import IconAwesome from "react-native-vector-icons/FontAwesome";
 import IconAntDesign from "react-native-vector-icons/AntDesign";
 import globalStyles from "../styles/global";
 
-export const Message = ({ userId, user, content, onPressStaredMessage }) => {
+export const Message = ({ id, userId, user, content, onPressLikeMessage, likes }) => {
   const myUser = "Yuri";
 
   return (
@@ -25,8 +25,11 @@ export const Message = ({ userId, user, content, onPressStaredMessage }) => {
           <Text style={{ color: "orange", fontSize: 16 }}>{user}</Text>
         </View>
 
-        <TouchableOpacity onPress={() => onPressStaredMessage({userId, user, content})}>
-          <IconAntDesign name="star" color="orange" size={20} />
+        <TouchableOpacity onPress={() => onPressLikeMessage({id, userId, user, content, likes})}>
+          <View style={{flex:1, alignItems: 'center'}}>
+            <IconAntDesign name="heart" color="orange" size={20} />
+            <Text style={globalStyles.text}>{likes}</Text>
+          </View>
         </TouchableOpacity>
       </View>
 

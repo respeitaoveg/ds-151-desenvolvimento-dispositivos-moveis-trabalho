@@ -1,13 +1,14 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { db } from "../firebase";
 import { onValue, ref, set } from "@firebase/database";
 import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
 import Message from "../components/Message";
 import IconAwesome from 'react-native-vector-icons/FontAwesome'
+import { AuthContext } from '../App'
 
 const HomeScreen = () => {
-
-  const userId = 123
+  const { state, signOut } = useContext(AuthContext)
+  console.log(111, state)
 
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
@@ -30,20 +31,20 @@ const HomeScreen = () => {
     const time = new Date().getTime();
 
     set(ref(db, `/chat/${time}`), {
+      id: time,
       userId: '123',
       user: "Yuri",
+      likes: 0,
       content: message,
     });
 
     setMessage("");
   }
 
-  function onPressStaredMessage(message) {
-    const time = new Date().getTime();
+  function onPressLikeMessage(message) {
+    message.likes++
 
-    console.log(message)
-
-    set(ref(db, `users/${userId}/${time}`), message);
+    set(ref(db, `/chat/${message.id}`), message);
   }
 
   return (
@@ -55,10 +56,12 @@ const HomeScreen = () => {
           messages.map((item, index) => (
             <Message 
               key={index} 
+              id={item.id}
               userId={item.userId}
               user={item.user} 
               content={item.content} 
-              onPressStaredMessage={onPressStaredMessage}
+              likes={item.likes}
+              onPressLikeMessage={onPressLikeMessage}
             />
           ))
         }
@@ -74,6 +77,9 @@ const HomeScreen = () => {
             returnKeyType='done'
           />
           <TouchableOpacity onPress={onCreateMessage}>
+            <IconAwesome name='send-o' color='orange' size={30} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => signOut()}>
             <IconAwesome name='send-o' color='orange' size={30} />
           </TouchableOpacity>
         </View>
