@@ -47,25 +47,21 @@ export default function App() {
           .then(userCredential => {
             dispatch({ type: 'SIGN_IN', user: userCredential.user });
           })
-          .catch(error => {
-            console.log(error)
-          })
+          .catch(error => console.error(error))
       },
       signUp: async ({email, password}) => {
         createUserWithEmailAndPassword(auth, email, password)
           .then(userCredential => {
             dispatch({ type: 'SIGN_IN', user: userCredential.user });
           })
-          .catch(error => {
-            console.log(error)
-          })
+          .catch(error => console.error(error))
         // dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
       },
       signOut: () => {
         auth.signOut().then(() => {
           dispatch({ type: 'SIGN_OUT' })
         })
-        .catch(error => console.log(error))
+        .catch(error => console.error(error))
       }
     }), []);
 

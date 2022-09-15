@@ -47,7 +47,6 @@ const HomeScreen = ({ navigation }) => {
   }
 
   function onPressLikeMessage(message) {
-    console.log(111, state.user.email)
     message.likes++;
 
     set(ref(db, `/chat/${message.id}`), message);
