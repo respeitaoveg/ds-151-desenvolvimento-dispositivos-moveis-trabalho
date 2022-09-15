@@ -40,23 +40,6 @@ export default function App() {
     }
   );
 
-  // useEffect(() => {
-  //   // const bootstrapAsync = async () => {
-  //   //   let user;
-
-  //   //   try {
-  //   //     user = await SecureStore.getItemAsync('user');
-  //   //   } catch (e) {
-  //   //     console.error(e)
-  //   //   }
-
-  //   //   dispatch({ type: 'RESTORE_TOKEN', token: user });
-  //   // };
-
-  //   // bootstrapAsync();
-  //   console.log(444, state)
-  // }, state.user);
-
   const authContext = useMemo(
     () => ({
       signIn: async ({email, password}) => {
@@ -78,13 +61,17 @@ export default function App() {
           })
         // dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
       },
-      signOut: () => dispatch({ type: 'SIGN_OUT' }),
-      state
+      signOut: () => {
+        auth.signOut().then(() => {
+          dispatch({ type: 'SIGN_OUT' })
+        })
+        .catch(error => console.log(error))
+      }
     }), []);
 
 
   return (
-    <AuthContext.Provider value={authContext}>
+    <AuthContext.Provider value={{...authContext, state}}>
       <SafeAreaProvider>
         {/* {true ? ( */}
         {state.isLogged ? (
