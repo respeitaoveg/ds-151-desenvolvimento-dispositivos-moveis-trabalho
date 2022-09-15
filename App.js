@@ -8,6 +8,7 @@ import { createContext, useEffect, useMemo, useReducer, useState } from 'react';
 import LoginScreen from './screens/LoginScreen';
 
 import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from "@firebase/auth";
+import TopMessagesScreen from './screens/TopMessagesScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -55,7 +56,6 @@ export default function App() {
             dispatch({ type: 'SIGN_IN', user: userCredential.user });
           })
           .catch(error => console.error(error))
-        // dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
       },
       signOut: () => {
         auth.signOut().then(() => {
@@ -69,12 +69,11 @@ export default function App() {
   return (
     <AuthContext.Provider value={{...authContext, state}}>
       <SafeAreaProvider>
-        {/* {true ? ( */}
         {state.isLogged ? (
           <NavigationContainer>
             <Stack.Navigator>
               <Stack.Screen name="Sala" options={{headerShown: false}} component={HomeScreen} />
-              <Stack.Screen name="Estrelas" component={StarsScreen} />
+              <Stack.Screen name="TopMessages" options={{headerShown: false}} component={TopMessagesScreen} />
             </Stack.Navigator>
           </NavigationContainer>
         ) :  (

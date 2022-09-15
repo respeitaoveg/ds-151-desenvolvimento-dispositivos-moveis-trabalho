@@ -1,22 +1,17 @@
 import { useContext, useEffect, useState } from "react";
 import { db } from "../firebase";
 import { onValue, ref, set } from "@firebase/database";
-import {
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
 import Message from "../components/Message";
-import IconAwesome from "react-native-vector-icons/FontAwesome";
 import IconMaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { AuthContext } from "../App";
+import _ from "lodash";
 
-const HomeScreen = ({ navigation }) => {
-  const { state, signOut } = useContext(AuthContext);
+const TopMessagesScreen = ({ navigation }) => {
+  const { signOut } = useContext(AuthContext);
 
-  const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
+  const [topMessages, setTopMessages] = useState([]);
 
   useEffect(() => {
     onValue(ref(db, "chat"), (snapshot) => {
@@ -29,45 +24,54 @@ const HomeScreen = ({ navigation }) => {
 
         setMessages(newMessages.reverse());
       }
-    });
+    })
   }, []);
 
-  function onCreateMessage() {
-    const time = new Date().getTime();
+  useEffect(() => {
+    const aux = _.chain(messages)
+    .sortBy("likes")
+    .reverse()
+    .take(5)
+    .value();
 
-    set(ref(db, `/chat/${time}`), {
-      id: time,
-      userId: state.user.email,
-      user: state.user.email,
-      likes: 0,
-      content: message,
-    });
+    setTopMessages(aux)
+  });
 
-    setMessage("");
-  }
-
-  function onPressLikeMessage(message) {
-    message.likes++;
-
-    set(ref(db, `/chat/${message.id}`), message);
-  }
+  function onPressLikeMessage() {}
 
   return (
     <View style={styles.container}>
-      <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, maxHeight: 70 }}>
-        <TouchableOpacity onPress={() => navigation.navigate('TopMessages')}>
-          <IconMaterialCommunityIcons name="trophy-award" color="orange" size={30} />
-        </TouchableOpacity>
+      <View
+        style={{
+          flex: 1,
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+          paddingHorizontal: 16,
+          maxHeight: 70,
+        }}
+      >
         <TouchableOpacity>
+          <IconMaterialCommunityIcons
+            name="trophy-award"
+            color="orange"
+            size={30}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate("Sala")}>
           <IconMaterialCommunityIcons name="robot" color="orange" size={40} />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => signOut()}>
-          <IconMaterialCommunityIcons name="exit-to-app" color="orange" size={30} />
+          <IconMaterialCommunityIcons
+            name="exit-to-app"
+            color="orange"
+            size={30}
+          />
         </TouchableOpacity>
       </View>
       <View style={styles.chat}>
-        {messages.length > 0 &&
-          messages.map((item, index) => (
+        {topMessages.length > 0 &&
+          topMessages.map((item, index) => (
             <Message
               key={index}
               id={item.id}
@@ -78,30 +82,6 @@ const HomeScreen = ({ navigation }) => {
               onPressLikeMessage={onPressLikeMessage}
             />
           ))}
-      </View>
-
-      <View
-        style={styles.footer}
-      >
-        <View
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            gap: 10,
-            width: "100%",
-          }}
-        >
-          <TextInput
-            style={styles.textInput}
-            value={message}
-            onChangeText={setMessage}
-            onSubmitEditing={onCreateMessage}
-            returnKeyType="done"
-          />
-          <TouchableOpacity onPress={onCreateMessage}>
-            <IconAwesome name="send-o" color="orange" size={30} />
-          </TouchableOpacity>
-        </View>
       </View>
     </View>
   );
@@ -117,7 +97,7 @@ const styles = StyleSheet.create({
     maxHeight: "100%",
   },
   chat: {
-    height: "80vh",
+    flex: 1,
     width: "100%",
     overflow: "scroll",
     gap: 20,
@@ -141,4 +121,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeScreen;
+export default TopMessagesScreen;
